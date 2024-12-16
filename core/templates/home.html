@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container d-flex flex-column mt-4 pt-4 pb-4">
+  <h1 class="align-self-center">To Do List</h1>
+
+  <form action="" method="POST" class="d-flex flex-column">
+    {% csrf_token %} {{form.as_p}}
+    <button class="btn btn-success align-self-center" name="save">
+      Agregar tarea
+    </button>
+  </form>
+</div>
+<hr />
+
+<div class="container mt-4">
+  <ul class="list-group list-group-striped">
+    {% for tarea in tareas %}
+    <li
+      class="list-group-item d-flex justify-content-between align-items-center {% if tarea.complete %}completed{% endif %}"
+    >
+      <form action="" method="POST" class="d-flex align-items-center">
+        {% csrf_token %}
+        <input
+          type="checkbox"
+          name="toggle"
+          value="{{ tarea.id }}"
+          {% if tarea.complete %}checked{% endif %}
+          onchange="this.form.submit()"
+        />
+
+        <label class="ms-2"> {{ tarea.title }} </label>
+      </form>
+      <form action="" method="POST">
+        {% csrf_token %}
+        <button class="btn btn-danger" name="delete" value="{{ tarea.id }}">
+          Borrar
+        </button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock content %}
